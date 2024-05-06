@@ -1,6 +1,18 @@
 # EasyOutline
 A quick start for Outline WIKI and iFramely
 
+# Requirements:
+
+- google developer OpenID (once while setting up)
+- SMTP Server (or you use google)
+- git
+- docker + docker-compose / docker compose commands
+
+### Why google?
+
+Well we first have to create a user using OpenID, and google is pretty easy to setup.
+After we logged in with google we are going to invite a new member.
+
 ## iFramely setup
 
 This pulls a Dockerfile (hosted inside ./iframely/dockerfile)

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rm -rf LICENSE README.md configs 
+rm -rf LICENSE README.md configs README-google.md
 
 FILE_LOCATION=""
 RANDKEY1="$(openssl rand -hex 32)"
@@ -147,6 +147,25 @@ redisLoginData(){
 
 }
 
+openId(){
+    echo
+    echo "Please provide your Google OpenID credentials"
+    echo "(More Info here https://github.com/Its4Nik/EasyOutline/blob/main/README-google.md)"
+    read -p "OIDC clien id: " oicd_id
+    read -p "Client Secret: " client_secret 
+    
+    echo "
+
+
+# REMOVE BELOW HERE:
+OIDC_CLIENT_ID=$oicd_id
+OIDC_CLIENT_SECRET=$client_secret
+OIDC_AUTH_URI=https://accounts.google.com/o/oauth2/v2/auth
+OIDC_TOKEN_URI=https://oauth2.googleapis.com/token
+OIDC_USERINFO_URI=https://openidconnect.googleapis.com/v1/userinfo
+OIDC_LOGOUT_URI=    
+    "
+}
 
 defaultParams
 randomKey
@@ -154,7 +173,7 @@ getUrlAndPort
 getSMTP
 getIframeLy
 redisLoginData
-
+openId
 
 echo
 echo "Continuing..."
