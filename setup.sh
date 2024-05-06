@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rm -rf LICENSE README.md configs README-google.md
+rm -rf LICENSE README.md configs README-google.md *.png
 
 FILE_LOCATION=""
 RANDKEY1="$(openssl rand -hex 32)"
@@ -191,5 +191,9 @@ rm ./Dockerfile
 rm -rf ./iframely
 
 docker compose up -d
+
+chmod -R 777 storage-data/
+
+echo "Thanks for trying this!"
 
 rm setup.sh
