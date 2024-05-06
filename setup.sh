@@ -167,5 +167,6 @@ sleep 2
 rm ./Dockerfile
 rm -rf ./iframely
 
+docker compose up -d
 
 rm setup.sh
