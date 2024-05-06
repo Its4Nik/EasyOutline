@@ -146,7 +146,11 @@ sleep 3
 
 git clone https://github.com/itteco/iframely
 
+cp config.local.js ./iframely/config.local.js
+
 docker build -t iframely:latest .
+
+sleep 2
 
 rm ./Dockerfile
 rm -rf ./iframely
