@@ -1,0 +1,56 @@
+services:
+  outline:
+    container_name: outline
+    image: docker.getoutline.com/outlinewiki/outline:latest
+    env_file: ./docker.env
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./storage-data:/var/lib/outline/data
+    depends_on:
+      - postgres
+      - redis
+
+  redis:
+    container_name: redis
+    image: redis
+    env_file: ./docker.env
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis.conf:/redis.conf
+    command: ["redis-server", "/redis.conf"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 30s
+      retries: 3
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    env_file: ./docker.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-d", "outline", "-U", "user"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    environment:
+      POSTGRES_USER: 'user'
+      POSTGRES_PASSWORD: 'kshadfh7w34rhbdfchklabvsdhzgfo'
+      POSTGRES_DB: 'outline'
+
+  iframely:
+    container_name: iframely
+    ports:
+        - 8061:8061
+    volumes:
+      - type: bind
+        source: ./config.local.js
+        target: /iframely/config.local.js
+    container_name: iframely
+    image: iframely:latest
