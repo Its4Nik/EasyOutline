@@ -17,7 +17,6 @@ git clone https://github.com/Its4Nik/EasyOutline/
 cd EasyOutline
 
 # 3.
-
 bash setup.sh
 ```
 
