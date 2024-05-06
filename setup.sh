@@ -127,7 +127,7 @@ addToConf(){
 
 redisLoginData(){
     set -x
-    sed -i -e 's/POSTGRES_PASSWORD: 'PASSWORD'/POSTGRES_PASSWORD: '$RANDKEY3'/g' docker-compose.yaml
+    cat docker-compose.yaml | sed -i -e 's/POSTGRES_PASSWORD: 'PASSWORD'/POSTGRES_PASSWORD: '$RANDKEY3'/g'
     addToConf DATABASE_URL=postgres://user:$RANDKEY3@127.0.0.1:5432/outline
     set +x
 }
