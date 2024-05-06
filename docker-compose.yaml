@@ -26,24 +26,6 @@ services:
       timeout: 30s
       retries: 3
 
-  postgres:
-    container_name: postgres
-    image: postgres
-    env_file: ./docker.env
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./database-data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD", "pg_isready", "-d", "outline", "-U", "user"]
-      interval: 30s
-      timeout: 20s
-      retries: 3
-    environment:
-      POSTGRES_USER: 'user'
-      POSTGRES_PASSWORD: 'PASSWORD'
-      POSTGRES_DB: 'outline'
-
   iframely:
     container_name: iframely
     ports:

@@ -126,10 +126,30 @@ addToConf(){
 }
 
 redisLoginData(){
-    set -x
+    
     cat docker-compose.yaml | sed -e 's/POSTGRES_PASSWORD: 'PASSWORD'/POSTGRES_PASSWORD: '$RANDKEY3'/g'
     addToConf DATABASE_URL=postgres://user:$RANDKEY3@127.0.0.1:5432/outline
-    set +x
+    
+    echo"
+  postgres:
+    container_name: postgres
+    image: postgres
+    env_file: ./docker.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-d", "outline", "-U", "user"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    environment:
+      POSTGRES_USER: 'user'
+      POSTGRES_PASSWORD: '$RANDKEY3'
+      POSTGRES_DB: 'outline'
+" >> docker-compose.yaml
+
 }
 
 
