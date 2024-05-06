@@ -1,5 +1,7 @@
 #!/bin/bash
 
+rm -rf LICENSE README.md configs 
+
 FILE_LOCATION=""
 RANDKEY1="$(openssl rand -hex 32)"
 RANDKEY2="$(openssl rand -hex 32)"
@@ -61,6 +63,7 @@ PORT=$PORT
 
 defaultParams(){
     cat default-params.txt >> docker.env
+    rm default-params.txt
     echo "" >> docker.env
     echo "# ---------- GENERATED -----------" >> docker.env
     echo "" >> docker.env
@@ -163,3 +166,6 @@ sleep 2
 
 rm ./Dockerfile
 rm -rf ./iframely
+
+
+rm setup.sh
