@@ -34,5 +34,4 @@ services:
       - type: bind
         source: ./config.local.js
         target: /iframely/config.local.js
-    container_name: iframely
     image: iframely:latest
