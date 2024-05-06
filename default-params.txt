@@ -5,6 +5,8 @@ DATABASE_CONNECTION_POOL_MAX=
 # Uncomment this to disable SSL for connecting to Postgres
 PGSSLMODE=disable
 
+COLLABORATION_URL=
+
 # For redis you can either specify an ioredis compatible url like this
 REDIS_URL=redis://127.0.0.1:6379
 # or alternatively, if you would like to provide additional connection options,
