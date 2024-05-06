@@ -47,7 +47,7 @@ randomKey(){
 }
 
 getUrlAndPort(){
-    echo "Please enter the URL as FQDN where Outline is reachable."
+    echo "Please enter the URL as FQDN WITH HTTP(S) where Outline is reachable."
     read -p "$ " URL
     confirm getUrlAndPort
 
