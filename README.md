@@ -22,6 +22,7 @@ bash setup.sh
 ```
 
 This will generate random passwords for encryption using `openssl rand -hex 32`
+For more info on how to setup google developer OICD look at this: https://github.com/Its4Nik/EasyOutline/blob/main/README-google.md
 
 ### Why google?
 
