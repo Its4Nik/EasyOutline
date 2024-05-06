@@ -21,16 +21,6 @@ echo "
 Welcome to EasyOutline Setup
 "
 
-getFileLocation(){
-    echo "Please enter your location where all files should be placed. (FULL PATH)"
-    read -p "$ " location
-    echo "> $location, is this correct? "
-
-    confirm getFileLocation
-        
-    FILE_LOCATION="$location"
-}
-
 confirm(){
     echo
     read -p "(y/n) " -n 1 confirm 
@@ -152,7 +142,6 @@ redisLoginData(){
 
 
 defaultParams
-getFileLocation
 randomKey
 getUrlAndPort
 getSMTP
