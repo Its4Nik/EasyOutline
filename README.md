@@ -1,5 +1,6 @@
 # EasyOutline
 A quick start for Outline WIKI and iFramely
+![image](https://github.com/Its4Nik/EasyOutline/assets/106100177/15932c08-e701-4d84-98f1-f240f01f3338)
 
 # Requirements:
 
