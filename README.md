@@ -16,7 +16,7 @@ After we logged in with google we are going to invite a new member.
 ## iFramely setup
 
 This pulls a Dockerfile (hosted inside ./iframely/dockerfile)
-And builds it as iframely:iframely:latest
+And builds it as iframely:latest
 
 ## Outline Setup
 
