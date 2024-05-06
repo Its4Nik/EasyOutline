@@ -126,10 +126,9 @@ addToConf(){
 }
 
 redisLoginData(){
-
     addToConf "DATABASE_URL=postgres://user:$RANDKEY3@127.0.0.1:5432/outline"
     
-    echo"
+    echo "
   postgres:
     container_name: postgres
     image: postgres
