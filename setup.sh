@@ -3,6 +3,7 @@
 FILE_LOCATION=""
 RANDKEY1="$(openssl rand -hex 32)"
 RANDKEY2="$(openssl rand -hex 32)"
+RANDKEY3="$(openssl rand -hex 32)"
 
 iframely_url="http://127.0.0.1:8061"
 iframely_api=""
@@ -124,16 +125,26 @@ addToConf(){
     echo "$@" >> docker.env
 }
 
+redisLoginData(){
+    sed -i -e 's/POSTGRES_PASSWORD: 'PASSWORD'/POSTGRES_PASSWORD: '$RANDKEY3'/g' docker-compose.yaml
+    addToConf DATABASE_URL=postgres://user:$RANDKEY3@127.0.0.1:5432/outline
+}
+
+
 defaultParams
 getFileLocation
 randomKey
 getUrlAndPort
 getSMTP
 getIframeLy
+redisLoginData
+
 
 echo
 echo "Continuing..."
 sleep 3
+
+git clone https://github.com/itteco/iframely
 
 docker build -t iframely:latest .
 

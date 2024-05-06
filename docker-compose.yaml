@@ -41,7 +41,7 @@ services:
       retries: 3
     environment:
       POSTGRES_USER: 'user'
-      POSTGRES_PASSWORD: 'kshadfh7w34rhbdfchklabvsdhzgfo'
+      POSTGRES_PASSWORD: 'PASSWORD'
       POSTGRES_DB: 'outline'
 
   iframely:
