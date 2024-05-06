@@ -87,7 +87,7 @@ getSMTP(){
     echo -e "${DV}###################${NC}"
     echo -e "${DV}### ${NC}Your Values${DV} ###${NC}"
     echo -e "${DV}###################${NC}"
-    echo -e "${DV}SMTP Server: $host:$por${NC}"
+    echo -e "${DV}SMTP Server: $host:$port${NC}"
     echo -e "${DV}User: $user - $passwd${NC}"
     echo -e "${DV}E-Mail: $email - Reply: $reply${NC}"
 
