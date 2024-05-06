@@ -8,6 +8,21 @@ A quick start for Outline WIKI and iFramely
 - git
 - docker + docker-compose / docker compose commands
 
+## How to?
+```bash
+# 1.
+git clone https://github.com/Its4Nik/EasyOutline/
+
+# 2.
+cd EasyOutline
+
+# 3.
+
+bash setup.sh
+```
+
+This will generate random passwords for encryption using `openssl rand -hex 32`
+
 ### Why google?
 
 Well we first have to create a user using OpenID, and google is pretty easy to setup.
