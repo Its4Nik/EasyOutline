@@ -33,3 +33,6 @@ Good. Now after Outline has started and after you have logged in with google, ac
 And send your first invite to your mail (can be the same Mail as you G-Mail).
 
 Perfect it should work now!
+
+If you see a "network error" go to 
+...here https://yourexternalur/auth/oidc.callback
