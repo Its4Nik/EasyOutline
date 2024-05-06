@@ -13,7 +13,7 @@ RUN apk add g++ make python3
 ENV NODE_ENV=local
 
 ## Utilize docker layer cache
-COPY package.json yarn.lock /iframely/
+COPY ./iframely/package.json ./iframely/yarn.lock /iframely/
 RUN yarn install --pure-lockfile --production
 
 COPY ./iframely /iframely
