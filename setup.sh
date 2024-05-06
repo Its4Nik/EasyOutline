@@ -103,7 +103,7 @@ getSMTP(){
 }
 
 getIframeLy(){
-    echo "Do you want to use the defaults?"
+    echo "Do you want to use the default iFramely values?"
     addToConf "# -------- iFramely --------"
     confirm customIframely 
     addToConf IFRAMELY_URL=$iframely_url
