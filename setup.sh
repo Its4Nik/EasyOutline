@@ -7,7 +7,9 @@ RANDKEY1="$(openssl rand -hex 32)"
 RANDKEY2="$(openssl rand -hex 32)"
 RANDKEY3="$(openssl rand -hex 32)"
 
-iframely_url="http://127.0.0.1:8061"
+IP="$(curl -4 https://ip.hetzner.com)"
+
+iframely_url="http://$IP:8061"
 iframely_api=""
 
 
@@ -119,8 +121,10 @@ addToConf(){
 }
 
 redisLoginData(){
-    addToConf "DATABASE_URL=postgres://user:$RANDKEY3@127.0.0.1:5432/outline"
+    addToConf "DATABASE_URL=postgres://user:$RANDKEY3@$IP:5432/outline"
     
+    addToConf "REDIS_URL=redis://$IP:6379"
+
     echo "
   postgres:
     container_name: postgres

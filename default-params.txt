@@ -9,8 +9,7 @@ PGSSLMODE=disable
 # server, for normal operation this does not need to be set.
 COLLABORATION_URL=
 
-# For redis you can either specify an ioredis compatible url like this
-REDIS_URL=redis://127.0.0.1:6379
+
 # or alternatively, if you would like to provide additional connection options,
 # use a base64 encoded JSON connection option object. Refer to the ioredis documentation
 # for a list of available options.
