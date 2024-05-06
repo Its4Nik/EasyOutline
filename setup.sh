@@ -164,7 +164,7 @@ OIDC_AUTH_URI=https://accounts.google.com/o/oauth2/v2/auth
 OIDC_TOKEN_URI=https://oauth2.googleapis.com/token
 OIDC_USERINFO_URI=https://openidconnect.googleapis.com/v1/userinfo
 OIDC_LOGOUT_URI=    
-    "
+    " >> docker.env
 }
 
 defaultParams
