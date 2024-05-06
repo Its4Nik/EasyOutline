@@ -7,6 +7,9 @@ RANDKEY1="$(openssl rand -hex 32)"
 RANDKEY2="$(openssl rand -hex 32)"
 RANDKEY3="$(openssl rand -hex 32)"
 
+NC="\033[0m"
+DV="\033[38;5;92m"
+
 IP="$(curl -4 https://ip.hetzner.com)"
 
 iframely_url="http://$IP:8061"
@@ -21,8 +24,8 @@ NODE_ENV=production" > docker.env
 
 clear
 
-echo "
-Welcome to EasyOutline Setup
+echo -e "
+${DV}Welcome to EasyOutline Setup${NC}
 "
 
 confirm(){
@@ -31,7 +34,7 @@ confirm(){
     case $confirm in 
         y|Y)
         echo
-        echo "OK"
+        echo -e "${DV}OK${NC}"
         ;;
         n|N)
         echo
@@ -43,7 +46,6 @@ confirm(){
 }
 
 randomKey(){
-    echo "UwU"
     echo "SECRET_KEY=$RANDKEY1 # Generate a hex-encoded 32-byte random key. You should use \`openssl rand -hex 32\`" >> docker.env
     echo "UTILS_SECRET=$RANDKEY2 # Generate a hex-encoded 32-byte random key. You should use \`openssl rand -hex 32\`" >> docker.env
 }
@@ -82,12 +84,12 @@ getSMTP(){
     echo
     echo
     echo
-    echo "###################"
-    echo "### Your Values ###"
-    echo "###################"
-    echo "SMTP Server: $host:$port"
-    echo "User: $user - $passwd"
-    echo "E-Mail: $email - Reply: $reply"
+    echo -e "${DV}###################${NC}"
+    echo -e "${DV}### ${NC}Your Values${DV} ###${NC}"
+    echo -e "${DV}###################${NC}"
+    echo -e "${DV}SMTP Server: $host:$por${NC}"
+    echo -e "${DV}User: $user - $passwd${NC}"
+    echo -e "${DV}E-Mail: $email - Reply: $reply${NC}"
 
     confirm getSMTP
 
