@@ -88,12 +88,24 @@ defaultParams(){
 # Function to get SMTP credentials
 getSMTP(){
     echo -e "${BLU}Please enter your SMTP Credentials${NC}"
-    read -p "${YLW}SMTP Host: ${NC}" host
-    read -p "${YLW}SMTP Port: ${NC}" port
-    read -p "${YLW}SMTP Username: ${NC}" user
-    read -p "${YLW}SMTP Password: ${NC}" passwd
-    read -p "${YLW}SMTP From E-Mail: ${NC}" email
-    read -p "${YLW}SMTP Reply E-Mail: ${NC}" reply 
+    echo -ne "${YLW}SMTP Host: ${NC}"
+    read -r host
+    echo
+    echo -ne "${YLW}SMTP Port: ${NC}"
+    read -r  port
+    echo
+    echo -ne "${YLW}SMTP Username: ${NC}"
+    read -r  user
+    echo
+    echo -ne "${YLW}SMTP Password: ${NC}"
+    read -r  passwd
+    echo
+    echo -ne "${YLW}SMTP From E-Mail: ${NC}"
+    read -r  email
+    echo
+    echo -ne "${YLW}SMTP Reply E-Mail: ${NC}"
+    read -r  reply 
+    echo
     echo
     echo
     echo
@@ -127,8 +139,12 @@ getIframeLy(){
 
 # Function to customize iFramely configuration
 customIframely(){
-    read -p "${YLW}iFramely URL: ${NC}" iframely_url
-    read -p "${YLW}iFramely API: ${NC}" iframely_api
+    echo -ne "${YLW}iFramely URL: ${NC}"
+    read -r  iframely_url
+    echo
+    echo -ne "${YLW}iFramely API: ${NC}"
+    read -r iframely_api
+    echo -e "\n"
     confirm customIframely
 }
 
@@ -171,8 +187,12 @@ openId(){
     echo
     echo -e "${BLU}Please provide your Google OpenID credentials${NC}"
     echo -e "${YLW}(More Info here https://github.com/Its4Nik/EasyOutline/blob/main/README-google.md)${NC}"
-    read -p "${YLW}OIDC clien id: ${NC}" oicd_id
-    read -p "${YLW}Client Secret: ${NC}" client_secret 
+    echo -ne "${YLW}OIDC clien id: ${NC}"
+    read -r  oicd_id
+    echo
+    echo -ne "${YLW}Client Secret: ${NC}"
+    read -r  client_secret 
+    echo
     
     echo "
 
