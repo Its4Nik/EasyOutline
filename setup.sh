@@ -48,11 +48,15 @@ confirm(){
 
 # Check docker dependency
 getDockerInstall() {
+    echo
+    echo
+    echo "########################"
     echo "Checking dependencies..."
     if command -v docker > /dev/null; then
         echo "${GRN}Docker is installed.${NC}"
     else
         echo -e "${RED}Please install docker:${NC} ${YLW}https://get.docker.com${NC}"
+        exit 1
     fi
 }
 
