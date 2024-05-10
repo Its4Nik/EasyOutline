@@ -1,55 +1,66 @@
 #!/bin/bash
 
+# Set Bash flags
+set -euo pipefail
+
+# Remove unnecessary files
 rm -rf LICENSE README.md configs README-google.md *.png README-Code-explanation.md
 
+# Initialize variables
 FILE_LOCATION=""
 RANDKEY1="$(openssl rand -hex 32)"
 RANDKEY2="$(openssl rand -hex 32)"
 RANDKEY3="$(openssl rand -hex 32)"
 
-NC="\033[0m"
-DV="\033[38;5;92m"
+# ANSI color codes for formatting output
+NC="\033[0m"        # No color
+BLU="\033[0;34m"    # Blue
+GRN="\033[0;32m"    # Green
+YLW="\033[1;33m"    # Yellow
+RED="\033[0;31m"    # Red
 
+# Function to display a dynamic progress bar
+progressBar() {
+    local width=50
+    local progress=$(( $1 * $width / 100 ))
+    printf "\r[${GRN}%-${width}s${NC}] ${1}%%" "$(< /dev/zero tr '\0' '#')"
+}
+
+# Function to get the public IP address
 IP="$(curl -4 https://ip.hetzner.com)"
 
+# Define iFramely variables
 iframely_url="http://$IP:8061"
 iframely_api=""
 
+# Print welcome message
+echo -e "${BLU}Welcome to EasyOutline Setup${NC}"
 
-#----------------------------------------------------------------------------------------
-
-echo "# –––––––––––––––– REQUIRED ––––––––––––––––
-
-NODE_ENV=production" > docker.env
-
-clear
-
-echo -e "
-${DV}Welcome to EasyOutline Setup${NC}
-"
-
+# Function to confirm user input
 confirm(){
     echo
     read -p "(y/n) " -n 1 confirm 
     case $confirm in 
         y|Y)
         echo
-        echo -e "${DV}OK${NC}"
+        echo -e "${GRN}OK${NC}"
         ;;
         n|N)
         echo
-        echo "Try again."
+        echo -e "${YLW}Try again.${NC}"
         $1
         ;;
     esac
     echo "----------------------------------------"
 }
 
+# Generate random keys and write to docker.env
 randomKey(){
     echo "SECRET_KEY=$RANDKEY1 # Generate a hex-encoded 32-byte random key. You should use \`openssl rand -hex 32\`" >> docker.env
     echo "UTILS_SECRET=$RANDKEY2 # Generate a hex-encoded 32-byte random key. You should use \`openssl rand -hex 32\`" >> docker.env
 }
 
+# Function to get URL and port for Outline
 getUrlAndPort(){
     echo "Please enter the URL as FQDN WITH HTTP(S) where Outline is reachable."
     read -p "$ " URL
@@ -65,35 +76,37 @@ PORT=$PORT
 " >> docker.env
 }
 
+# Set default parameters by copying from a file
 defaultParams(){
     cat default-params.txt >> docker.env
     rm default-params.txt
     echo "" >> docker.env
-    echo "# ---------- GENERATED -----------" >> docker.env
+    echo -e "${BLU}# ---------- GENERATED -----------${NC}" >> docker.env
     echo "" >> docker.env
 }
 
+# Function to get SMTP credentials
 getSMTP(){
-    echo "Please enter your SMTP Credentials"
-    read -p "SMTP Host: " host
-    read -p "SMTP Port: " port
-    read -p "SMTP Username: " user
-    read -p "SMTP Password: " passwd
-    read -p "SMTP From E-Mail: " email
-    read -p "SMTP Reply E-Mail: " reply 
+    echo -e "${BLU}Please enter your SMTP Credentials${NC}"
+    read -p "${YLW}SMTP Host: ${NC}" host
+    read -p "${YLW}SMTP Port: ${NC}" port
+    read -p "${YLW}SMTP Username: ${NC}" user
+    read -p "${YLW}SMTP Password: ${NC}" passwd
+    read -p "${YLW}SMTP From E-Mail: ${NC}" email
+    read -p "${YLW}SMTP Reply E-Mail: ${NC}" reply 
     echo
     echo
     echo
-    echo -e "${DV}###################${NC}"
-    echo -e "${DV}### ${NC}Your Values${DV} ###${NC}"
-    echo -e "${DV}###################${NC}"
-    echo -e "${DV}SMTP Server: $host:$port${NC}"
-    echo -e "${DV}User: $user - $passwd${NC}"
-    echo -e "${DV}E-Mail: $email - Reply: $reply${NC}"
+    echo -e "${GRN}###################${NC}"
+    echo -e "${GRN}### ${NC}Your Values${GRN} ###${NC}"
+    echo -e "${GRN}###################${NC}"
+    echo -e "${GRN}SMTP Server: ${YLW}$host:$port${NC}"
+    echo -e "${GRN}User: ${YLW}$user - $passwd${NC}"
+    echo -e "${GRN}E-Mail: ${YLW}$email - Reply: $reply${NC}"
 
     confirm getSMTP
 
-    addToConf "# --------- EMAIL ----------"
+    addToConf "${BLU}# --------- EMAIL ----------${NC}"
     addToConf SMTP_HOST=$host
     addToConf SMTP_PORT=$port
     addToConf SMTP_USERNAME=$user
@@ -102,26 +115,30 @@ getSMTP(){
     addToConf SMTP_REPLY_EMAIL=$reply
 }
 
+# Function to set iFramely configuration
 getIframeLy(){
     echo "Do you want to use the default iFramely values?"
-    addToConf "# -------- iFramely --------"
+    addToConf "${BLU}# -------- iFramely --------${NC}"
     confirm customIframely 
     addToConf IFRAMELY_URL=$iframely_url
     addToConf IFRAMELY_API_KEY=$iframely_api
     
 }
 
+# Function to customize iFramely configuration
 customIframely(){
-    read -p "iFramely URL: " iframely_url
-    read -p "iFramely API: " iframely_api
+    read -p "${YLW}iFramely URL: ${NC}" iframely_url
+    read -p "${YLW}iFramely API: ${NC}" iframely_api
     confirm customIframely
 }
 
+# Function to add configuration parameters to docker.env
 addToConf(){
     echo "" >> docker.env
     echo "$@" >> docker.env
 }
 
+# Function to set up PostgreSQL and Redis configurations
 redisLoginData(){
     addToConf "DATABASE_URL=postgres://user:$RANDKEY3@$IP:5432/outline"
     
@@ -149,12 +166,13 @@ redisLoginData(){
 
 }
 
+# Function to set up OpenID configuration
 openId(){
     echo
-    echo "Please provide your Google OpenID credentials"
-    echo "(More Info here https://github.com/Its4Nik/EasyOutline/blob/main/README-google.md)"
-    read -p "OIDC clien id: " oicd_id
-    read -p "Client Secret: " client_secret 
+    echo -e "${BLU}Please provide your Google OpenID credentials${NC}"
+    echo -e "${YLW}(More Info here https://github.com/Its4Nik/EasyOutline/blob/main/README-google.md)${NC}"
+    read -p "${YLW}OIDC clien id: ${NC}" oicd_id
+    read -p "${YLW}Client Secret: ${NC}" client_secret 
     
     echo "
 
@@ -169,6 +187,7 @@ OIDC_LOGOUT_URI=
     " >> docker.env
 }
 
+# Run setup functions
 defaultParams
 randomKey
 getUrlAndPort
@@ -178,24 +197,28 @@ redisLoginData
 openId
 
 echo
-echo "Continuing..."
-sleep 3
+echo -e "${GRN}Continuing...${NC}"
 
+# Build Docker image with dynamic progress bar
+echo "Building Docker image..."
+docker build -t iframely:latest . --progress=plain | \
+    while IFS= read -r line; do
+        if [[ "$line" =~ ^\ \[([0-9]+)%\].* ]]; then
+            progressBar "${BASH_REMATCH[1]}"
+        fi
+    done
+printf "\n"
+
+# Clone iFramely repository
 git clone https://github.com/itteco/iframely
 
+# Copy configuration file to iFramely directory
 cp config.local.js ./iframely/config.local.js
 
-docker build -t iframely:latest .
-
-sleep 2
-
-rm ./Dockerfile
-rm -rf ./iframely
-
+# Start Docker containers
 docker compose up -d
 
-chmod -R 777 storage-data/
+echo -e "${GRN}Thanks for trying this!${NC}"
 
-echo "Thanks for trying this!"
-
+# Remove setup script
 rm setup.sh
