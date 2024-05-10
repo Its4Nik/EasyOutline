@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Set Bash flags
 set -euo pipefail
 
@@ -18,13 +17,6 @@ BLU="\033[0;34m"    # Blue
 GRN="\033[0;32m"    # Green
 YLW="\033[1;33m"    # Yellow
 RED="\033[0;31m"    # Red
-
-# Function to display a dynamic progress bar
-progressBar() {
-    local width=50
-    local progress=$(( $1 * $width / 100 ))
-    printf "\r[${GRN}%-${width}s${NC}] ${1}%%" "$(< /dev/zero tr '\0' '#')"
-}
 
 # Function to get the public IP address
 IP="$(curl -4 https://ip.hetzner.com)"
@@ -52,6 +44,23 @@ confirm(){
         ;;
     esac
     echo "----------------------------------------"
+}
+
+# Check docker dependency
+getDockerInstall() {
+    echo "Checking dependencies..."
+    if command -v docker > /dev/null; then
+        echo "${GRN}Docker is installed.${NC}"
+    else
+        echo -e "${RED}Please install docker:${NC} ${YLW}https://get.docker.com${NC}"
+    fi
+}
+
+# Function to display a dynamic progress bar
+progressBar() {
+    local width=50
+    local progress=$(( $1 * $width / 100 ))
+    printf "\r[${GRN}%-${width}s${NC}] ${1}%%" "$(< /dev/zero tr '\0' '#')"
 }
 
 # Generate random keys and write to docker.env
@@ -90,22 +99,16 @@ getSMTP(){
     echo -e "${BLU}Please enter your SMTP Credentials${NC}"
     echo -ne "${YLW}SMTP Host: ${NC}"
     read -r host
-    echo
     echo -ne "${YLW}SMTP Port: ${NC}"
     read -r  port
-    echo
     echo -ne "${YLW}SMTP Username: ${NC}"
     read -r  user
-    echo
     echo -ne "${YLW}SMTP Password: ${NC}"
     read -r  passwd
-    echo
     echo -ne "${YLW}SMTP From E-Mail: ${NC}"
     read -r  email
-    echo
     echo -ne "${YLW}SMTP Reply E-Mail: ${NC}"
     read -r  reply 
-    echo
     echo
     echo
     echo
@@ -141,7 +144,6 @@ getIframeLy(){
 customIframely(){
     echo -ne "${YLW}iFramely URL: ${NC}"
     read -r  iframely_url
-    echo
     echo -ne "${YLW}iFramely API: ${NC}"
     read -r iframely_api
     echo -e "\n"
