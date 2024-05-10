@@ -210,6 +210,7 @@ OIDC_LOGOUT_URI=
 }
 
 # Run setup functions
+getDockerInstall
 defaultParams
 randomKey
 getUrlAndPort
