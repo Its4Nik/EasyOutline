@@ -70,7 +70,12 @@ getDockerInstall() {
         echo "${YLW}Iframely Directory found, using this one.${NC}"
     else
         # Clone iFramely repository
+        echo
+        echo "${YLW}Installing iFramely${NC}"
+        echo
         git clone https://github.com/itteco/iframely
+        echo
+        echo "${GRN}Done${NC}"
     fi
     echo -e "${GRN}OK${NC}"
 }
