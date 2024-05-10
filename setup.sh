@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rm -rf LICENSE README.md configs README-google.md *.png
+rm -rf LICENSE README.md configs README-google.md *.png README-Code-explanation.md
 
 FILE_LOCATION=""
 RANDKEY1="$(openssl rand -hex 32)"
