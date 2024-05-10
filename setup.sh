@@ -50,14 +50,22 @@ confirm(){
 getDockerInstall() {
     echo
     echo
-    echo "########################"
-    echo "Checking dependencies..."
+    echo 
+    echo -e "Checking dependencies..."
     if command -v docker > /dev/null; then
-        echo "${GRN}Docker is installed.${NC}"
+        echo -e "${GRN}Docker is installed.${NC}"
     else
         echo -e "${RED}Please install docker:${NC} ${YLW}https://get.docker.com${NC}"
         exit 1
     fi
+    
+    if command -v git > /dev/null; then
+        echo -e "${GRN}git is installed.${NC}"
+    else
+        echo -e "${RED}Please install git${NC}"
+        exit 1
+    fi
+    echo -e "${GRN}OK${NC}"
 }
 
 # Function to display a dynamic progress bar
