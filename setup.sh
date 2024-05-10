@@ -65,6 +65,13 @@ getDockerInstall() {
         echo -e "${RED}Please install git${NC}"
         exit 1
     fi
+
+    if [ -d ./iframely ]; then
+        echo "${YLW}Iframely Directory found, using this one.${NC}"
+    else
+        # Clone iFramely repository
+        git clone https://github.com/itteco/iframely
+    fi
     echo -e "${GRN}OK${NC}"
 }
 
@@ -242,10 +249,6 @@ do
     sleep 0.1
 done
 printf "\rDone!       \n"
-
-
-# Clone iFramely repository
-git clone https://github.com/itteco/iframely
 
 # Copy configuration file to iFramely directory
 cp config.local.js ./iframely/config.local.js
