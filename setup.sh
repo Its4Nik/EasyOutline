@@ -67,7 +67,7 @@ getDockerInstall() {
     fi
 
     if [ -d ./iframely ]; then
-        echo "${YLW}Iframely Directory found, using this one.${NC}"
+        echo -e "${YLW}Iframely Directory found, using this one.${NC}"
     else
         # Clone iFramely repository
         echo
