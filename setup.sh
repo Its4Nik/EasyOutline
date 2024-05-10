@@ -68,13 +68,6 @@ getDockerInstall() {
     echo -e "${GRN}OK${NC}"
 }
 
-# Function to display a dynamic progress bar
-progressBar() {
-    local width=50
-    local progress=$(( $1 * $width / 100 ))
-    printf "\r[${GRN}%-${width}s${NC}] ${1}%%" "$(< /dev/zero tr '\0' '#')"
-}
-
 # Generate random keys and write to docker.env
 randomKey(){
     echo "SECRET_KEY=$RANDKEY1 # Generate a hex-encoded 32-byte random key. You should use \`openssl rand -hex 32\`" >> docker.env
@@ -234,15 +227,22 @@ openId
 echo
 echo -e "${GRN}Continuing...${NC}"
 
-# Build Docker image with dynamic progress bar
-echo "Building Docker image..."
-docker build -t iframely:latest . --progress=plain | \
-    while IFS= read -r line; do
-        if [[ "$line" =~ ^\ \[([0-9]+)%\].* ]]; then
-            progressBar "${BASH_REMATCH[1]}"
-        fi
-    done
-printf "\n"
+# Build Docker image with progress bar
+echo -n "Building Docker image..."
+docker build -q -t iframely:latest . >/dev/null
+
+# Display progress bar
+pid=$!
+spin='-\|/'
+i=0
+while kill -0 $pid 2>/dev/null
+do
+    i=$(( (i+1) %4 ))
+    printf "\r${spin:$i:1}"
+    sleep 0.1
+done
+printf "\rDone!       \n"
+
 
 # Clone iFramely repository
 git clone https://github.com/itteco/iframely
