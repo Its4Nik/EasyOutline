@@ -4,7 +4,7 @@ A quick start for Outline WIKI and iFramely
 
 # Requirements:
 
-- google developer OpenID (once while setting up)
+- google developer OpenID (once while setting up): [OpenID Setup](https://github.com/Its4Nik/EasyOutline/blob/main/README-google.md)
 - SMTP Server (or you use google)
 - git
 - docker + docker-compose / docker compose commands
