@@ -84,11 +84,10 @@ check_dependencies() {
 
 install_outline() {
   echo "Installing outline to $path_to_outline..."
-  run_and_log "cd \"$path_to_outline\""
   # Add installation commands here
 }
 
-# ----------------------------------
+# -------------------------------------------
 
 case "$option" in
   -h|--help) help ;;
