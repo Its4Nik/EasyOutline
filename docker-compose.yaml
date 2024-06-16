@@ -5,7 +5,7 @@ services:
     env_file:
       - path: ./outline-main.env
     ports:
-      - "3000:3000"
+      - "3000:3000" # OUTLINE PORT
     volumes:
       - ./storage-data:/var/lib/outline/data
     depends_on:
