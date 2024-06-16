@@ -26,12 +26,4 @@ services:
       timeout: 30s
       retries: 3
 
-  iframely:
-    container_name: iframely
-    ports:
-        - 8061:8061
-    volumes:
-      - type: bind
-        source: ./config.local.js
-        target: /iframely/config.local.js
-    image: iframely:latest
+
