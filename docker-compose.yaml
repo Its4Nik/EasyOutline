@@ -33,8 +33,7 @@ services:
     restart: always
     image: postgres
     env_file:
-      - path: ./outline-main.env
-      - path: ./postgres.env
+      - path: ./outline.env
     ports:
       - "5432:5432"
     volumes:
