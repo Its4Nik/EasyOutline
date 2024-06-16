@@ -18,7 +18,7 @@ services:
     env_file:
       - path: ./outline-main.env
     ports:
-      - "6379:6379"
+      - "6379:6379" # REDIS PORT
     command: ["redis-server", "/redis.conf"]
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
