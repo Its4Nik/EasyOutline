@@ -37,6 +37,7 @@ TODO="$(mktemp)"
 POSTGRES_PASSWORD=""
 POSTGRES_PORT="5432"
 REDIS_PORT="6379"
+IFRAMELY_PORT="8061"
 
 # Colors:
 lime="\033[38;5;10m"
@@ -440,7 +441,7 @@ run_default_env_install() {
         echo
         echo "# --------"
         echo "# iFramely"
-        echo "IFRAMELY_URL="
+        echo "IFRAMELY_URL=${local_ip}:${IFRAMELY_PORT}"
         echo "IFRAMELY_API_KEY="
         echo
         echo "# ----------- #"
