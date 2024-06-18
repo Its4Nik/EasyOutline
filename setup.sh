@@ -257,13 +257,13 @@ process_prompt() {
 # <-------------------------------------------------------------------------->
 # Gives the user time to read the first "pop up"
 wait_to_read() {
-    local spinner=("/" "-" "\\" "|")
+    local spinner=("⣾" "⣽" "⣻" "⢿" "⡿" "⣟" "⣯" "⣷")
     local delay=0.1
 
     echo -n "Loading...  "
     for ((i = 0; i < 5; i++)); do
         for j in "${spinner[@]}"; do
-            echo -ne "\b$j"
+            echo -ne "\b${cyan}$j${nc}"
             sleep $delay
         done
     done
@@ -609,7 +609,7 @@ configure_smtp() {
         ;;
     reply)
         line_to_replace="SMTP_REPLY_EMAIL="
-        echo "Please enter the reply E-Mail."
+        echo "Please enter the replay E-Mail."
         read -r -p "Reply to: " input
         sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
         ;;
