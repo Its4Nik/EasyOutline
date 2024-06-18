@@ -640,7 +640,7 @@ guide() {
         if [[ -z "$(echo "$line" | cut -d'=' -f2-)" ]]; then
             case "$(echo "$line" | cut -d'=' -f1)" in
             OIDC_CLIENT_ID)
-                echo "[ OIDC ]: You have to set an OIDC Client ID, to do this type: 'oidc id'"
+                echo -e "[ ${blue}OIDC${nc} ]: You have to set an OIDC Client ID, to do this type: 'oidc id'"
                 ;;
             OIDC_CLIENT_SECRET)
                 echo -e "[ ${blue}OIDC${nc} ]: You have to set an client secret, to do this type: 'oidc secret'"
