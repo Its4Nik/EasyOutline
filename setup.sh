@@ -344,6 +344,8 @@ run_default_env_install() {
 
     git clone https://github.com/itteco/iframely ./easy-outline/iframely
 
+    mv ./easy-outline/iframely/config.local.js.SAMPLE ./easy-outline/iframely/config.local.js
+
     {
         echo "# ------------------------------------------ #"
         echo "# Deafult configuration, please don't change #"
