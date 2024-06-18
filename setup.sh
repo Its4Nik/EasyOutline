@@ -607,9 +607,9 @@ configure_smtp() {
         read -r -p "From: " input
         sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
         ;;
-    logout)
+    reply)
         line_to_replace="SMTP_REPLY_EMAIL="
-        echo "Please enter the replay E-Mail."
+        echo "Please enter the reply E-Mail."
         read -r -p "Reply to: " input
         sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
         ;;
