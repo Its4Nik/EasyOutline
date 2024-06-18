@@ -15,6 +15,8 @@ services:
   redis:
     container_name: redis
     image: redis
+    volumes:
+      - ./easy-outline/redis.conf:/redis.conf
     env_file:
       - path: ./outline.env
     ports:
