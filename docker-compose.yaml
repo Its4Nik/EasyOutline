@@ -3,7 +3,7 @@ services:
     container_name: outline
     image: docker.getoutline.com/outlinewiki/outline:latest
     env_file:
-      - path: ./outline-main.env
+      - path: ./outline.env
     ports:
       - "3000:3000" # OUTLINE PORT
     volumes:
@@ -16,7 +16,7 @@ services:
     container_name: redis
     image: redis
     env_file:
-      - path: ./outline-main.env
+      - path: ./outline.env
     ports:
       - "6379:6379" # REDIS PORT
     command: ["redis-server", "/redis.conf"]
@@ -41,4 +41,3 @@ services:
       interval: 30s
       timeout: 20s
       retries: 3
-
