@@ -28,6 +28,7 @@ missing_deps=()
 
 #
 compose_file="https://raw.githubusercontent.com/Its4Nik/EasyOutline/main/docker-compose.yaml"
+iframely_git="https://github.com/itteco/iframely"
 local_ip="$(curl -4 https://ip.hetzner.com)"
 guided_install="true"
 TODO="$(mktemp)"
@@ -313,7 +314,7 @@ install_docker_compose_and_postgres_and_redis() {
         echo "PGSSLMODE=disable"
         echo "REDIS_URL=redis://${local_ip}:${REDIS_PORT}"
         echo
-    } >>outline.env
+    } >> outline.env
 }
 
 # <-------------------------------------------------------------------------->
@@ -334,11 +335,14 @@ get_postgres_key() {
 # default env config
 run_default_env_install() {
     mkdir easy-outline
+    mkdir easy-outline/iframely
     local SECRET_KEY
     local UTILS_SECRET
 
     SECRET_KEY="$(openssl rand -hex 32)"
     UTILS_SECRET="$(openssl rand -hex 32)"
+
+    git clone https://github.com/itteco/iframely ./easy-outline/iframely
 
     {
         echo "# ------------------------------------------ #"
