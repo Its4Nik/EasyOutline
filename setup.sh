@@ -26,7 +26,7 @@
 dependencies=("mktemp" "docker" "openssl" "wget" "git" "awk" "sed" "cut")
 missing_deps=()
 
-# 
+#
 compose_file="https://raw.githubusercontent.com/Its4Nik/EasyOutline/main/docker-compose.yaml"
 local_ip="$(curl -4 https://ip.hetzner.com)"
 guided_install="true"
@@ -49,10 +49,10 @@ hostname="$(hostname)"
 
 # <-------------------------------------------------------------------------->
 # "Splashscreen"
-welcome(){
+welcome() {
     clear
-    if command -v figlet > /dev/null; then
-        if command -v lolcat > /dev/null; then
+    if command -v figlet >/dev/null; then
+        if command -v lolcat >/dev/null; then
             figlet -tc "EasyOutline V2" | lolcat
         else
             figlet -tc "EasyOutline V2"
@@ -60,7 +60,6 @@ welcome(){
     else
         echo "> > > EasOutline V2 < < <"
     fi
-
 
     echo -e "
 EasyOutline aims to provide a smooth Outline Wiki Install.
@@ -98,40 +97,42 @@ install_dependencies() {
 
     os_release=$(cat /etc/os-release)
 
-    local ID   
+    local ID
     local ID_LIKE
 
     ID=$(echo "$os_release" | grep '^ID=' | cut -d'=' -f2 | tr -d '"')
     ID_LIKE=$(echo "$os_release" | grep '^ID_LIKE=' | cut -d'=' -f2 | tr -d '"')
 
     case "$ID" in
-        ubuntu|debian)  install_cmd="sudo apt-get install -y"   ;;
-        fedora)         install_cmd="sudo dnf install -y"       ;;
-        centos|rhel)    install_cmd="sudo yum install -y"       ;;
-        arch|manjaro)   install_cmd="sudo pacman -S --noconfirm";;
-        suse|opensuse)  install_cmd="sudo zypper install -y"    ;;
-        alpine)         install_cmd="sudo apk add"              ;;
+    ubuntu | debian) install_cmd="sudo apt-get install -y" ;;
+    fedora) install_cmd="sudo dnf install -y" ;;
+    centos | rhel) install_cmd="sudo yum install -y" ;;
+    arch | manjaro) install_cmd="sudo pacman -S --noconfirm" ;;
+    suse | opensuse) install_cmd="sudo zypper install -y" ;;
+    alpine) install_cmd="sudo apk add" ;;
+    *)
+        case "$ID_LIKE" in
+        debian) install_cmd="sudo apt-get install -y" ;;
+        rhel | centos | fedora) install_cmd="sudo yum install -y" ;;
+        arch) install_cmd="sudo pacman -S --noconfirm" ;;
+        suse) install_cmd="sudo zypper install -y" ;;
         *)
-            case "$ID_LIKE" in
-                debian)             install_cmd="sudo apt-get install -y"   ;;
-                rhel|centos|fedora) install_cmd="sudo yum install -y"       ;;
-                arch)               install_cmd="sudo pacman -S --noconfirm";;
-                suse)               install_cmd="sudo zypper install -y"    ;;
-                *) 
-                    echo "Unknown OS, please install dependencies manually."
-                    return 1
-                    ;;
-            esac
+            echo "Unknown OS, please install dependencies manually."
+            return 1
             ;;
+        esac
+        ;;
     esac
-
 
     echo -e "Do you want to use this: '${red}$install_cmd${nc}' as install command? ${grey}(default: yes)${nc}"
     read -r -n 1 -p "(y/n): " conf
     echo
     case "$conf" in
-        n|N) echo "Please install your dependencies manually." ; return 1 ;;
-        *) true ;;
+    n | N)
+        echo "Please install your dependencies manually."
+        return 1
+        ;;
+    *) true ;;
     esac
 
     for dependency in "${missing_deps[@]}"; do
@@ -142,19 +143,19 @@ install_dependencies() {
 # <-------------------------------------------------------------------------->
 # Function to test if all dependencies are installed
 
-get_dependencies(){
+get_dependencies() {
     clear
     echo "Checking dependencies:"
     local missing_dep="false"
 
     for dep in "${dependencies[@]}"; do
-        if command -v "$dep" > /dev/null; then
+        if command -v "$dep" >/dev/null; then
             echo -e "${lime}✓ $dep found${nc}"
         else
             echo -e "${red}✗ $dep not found${nc}"
             missing_dep="true"
             missing_deps+=("$dep")
-        fi        
+        fi
     done
 
     if [[ "$missing_dep" = "true" ]]; then
@@ -163,8 +164,8 @@ get_dependencies(){
         echo
 
         case "$conf" in
-            n|N) true ;;
-            *) install_dependencies ;;
+        n | N) true ;;
+        *) install_dependencies ;;
         esac
     fi
 }
@@ -172,7 +173,7 @@ get_dependencies(){
 # <-------------------------------------------------------------------------->
 # Shell prompt
 
-outshell(){
+outshell() {
     echo
     echo -e "${cyan}$USER${nc} ${grey}at${nc} ${blue}$hostname${nc} ${grey}in${nc} ${cyan}$(pwd)${nc}"
     echo -ne "${grey}> ${nc}"
@@ -183,7 +184,7 @@ outshell(){
 
 # <-------------------------------------------------------------------------->
 # Help screen
-help_prompts(){
+help_prompts() {
     echo -e "Usage: [${cyan}command${nc}] [${blue}sub-command${nc}]
 ${nc}
 ${nc}Commands:
@@ -222,7 +223,7 @@ ${nc}"
 
 # <-------------------------------------------------------------------------->
 # Process the user's input
-process_prompt(){
+process_prompt() {
     local prompt
     local arg
     local input
@@ -230,37 +231,37 @@ process_prompt(){
     prompt="$(echo "$input" | cut -d' ' -f1)"
     arg="$(echo "$input" | cut -d' ' -f2-)"
 
-    case "$prompt" in 
-        configure) configure_outline "$arg" ;;
-        oidc) configure_oidc "$arg" ;;
-        smtp) configure_smtp "$arg" ;;
-        install) install_docker_compose_and_postgres_and_redis ;;
-        rmdir) rm -r "$arg" || echo -e "Not possible to delete $arg" ;;
-        mkdir) mkdir "$arg" || echo -e "Creating $arg not possible" ;;
-        clear) clear ;;
-        quit|exit) exit 0 ;;
-        ls) ls ;;
-        cd) cd "$arg" || echo -e "${red} $arg not possible to cd into here.${nc}";;
-        help|HELP|Help) help_prompts ;;
-        unguided) guided_install=false ;;
-        *) 
-            if [[ -z "$prompt" ]]; then
-                true
-            else
-                echo -e "${red}Command not found, try '${nc}help${red}' for help.${nc}"     
-            fi
+    case "$prompt" in
+    configure) configure_outline "$arg" ;;
+    oidc) configure_oidc "$arg" ;;
+    smtp) configure_smtp "$arg" ;;
+    install) install_docker_compose_and_postgres_and_redis ;;
+    rmdir) rm -r "$arg" || echo -e "Not possible to delete $arg" ;;
+    mkdir) mkdir "$arg" || echo -e "Creating $arg not possible" ;;
+    clear) clear ;;
+    quit | exit) exit 0 ;;
+    ls) ls ;;
+    cd) cd "$arg" || echo -e "${red} $arg not possible to cd into here.${nc}" ;;
+    help | HELP | Help) help_prompts ;;
+    unguided) guided_install=false ;;
+    *)
+        if [[ -z "$prompt" ]]; then
+            true
+        else
+            echo -e "${red}Command not found, try '${nc}help${red}' for help.${nc}"
+        fi
         ;;
     esac
 }
 
 # <-------------------------------------------------------------------------->
 # Gives the user time to read the first "pop up"
-wait_to_read(){
+wait_to_read() {
     local spinner=("/" "-" "\\" "|")
     local delay=0.1
 
     echo -n "Loading...  "
-    for (( i=0; i<5; i++ )); do
+    for ((i = 0; i < 5; i++)); do
         for j in "${spinner[@]}"; do
             echo -ne "\b$j"
             sleep $delay
@@ -270,15 +271,15 @@ wait_to_read(){
 
 # <-------------------------------------------------------------------------->
 # Basic "install" of the necessariy docker compose
-install_docker_compose_and_postgres_and_redis(){
+install_docker_compose_and_postgres_and_redis() {
     wget -q "$compose_file"
 
     echo
     echo "Do you want to use a random generated password for postgres?"
     read -r -p "(y/n): " conf
     case "$conf" in
-        n|N) get_postgres_key "n";;
-        *) get_postgres_key "y" ;;
+    n | N) get_postgres_key "n" ;;
+    *) get_postgres_key "y" ;;
     esac
 
     echo "Do you want to use a custom postgres port? (Default: 5432)"
@@ -300,24 +301,24 @@ install_docker_compose_and_postgres_and_redis(){
     run_default_env_install
 
     {
-    echo "# ------------------------------ #"
-    echo "# All of Postgres and Redis Conf #"
-    echo "# ------------------------------ #"
-    echo "POSTGRES_PASSWORD: '$POSTGRES_PASSWORD'"
-    echo "POSTGRES_USER: 'outlinedb'"
-    echo "POSTGRES_DB: 'outline'"
-    echo "DATABASE_URL: postgres://outlinedb:${POSTGRES_PASSWORD}@${local_ip}:${POSTGRES_PORT}/outline"
-    echo "DATABASE_CONNECTION_POOL_MIN=1"
-    echo "DATABASE_CONNECTION_POOL_MAX="
-    echo "PGSSLMODE=disable"
-    echo "REDIS_URL=redis://${local_ip}:${REDIS_PORT}"
-    echo
-    } >> outline.env
+        echo "# ------------------------------ #"
+        echo "# All of Postgres and Redis Conf #"
+        echo "# ------------------------------ #"
+        echo "POSTGRES_PASSWORD: '$POSTGRES_PASSWORD'"
+        echo "POSTGRES_USER: 'outlinedb'"
+        echo "POSTGRES_DB: 'outline'"
+        echo "DATABASE_URL: postgres://outlinedb:${POSTGRES_PASSWORD}@${local_ip}:${POSTGRES_PORT}/outline"
+        echo "DATABASE_CONNECTION_POOL_MIN=1"
+        echo "DATABASE_CONNECTION_POOL_MAX="
+        echo "PGSSLMODE=disable"
+        echo "REDIS_URL=redis://${local_ip}:${REDIS_PORT}"
+        echo
+    } >>outline.env
 }
 
 # <-------------------------------------------------------------------------->
 # Get postgres key
-get_postgres_key(){
+get_postgres_key() {
     local random="$1"
 
     touch outline.env
@@ -331,7 +332,7 @@ get_postgres_key(){
 
 # <-------------------------------------------------------------------------->
 # default env config
-run_default_env_install(){
+run_default_env_install() {
     mkdir easy-outline
     local SECRET_KEY
     local UTILS_SECRET
@@ -457,37 +458,37 @@ run_default_env_install(){
         echo "SMTP_REPLY_EMAIL="
         echo "SMTP_TLS_CIPHERS="
         echo "SMTP_SECURE=false"
-    } > outline.env
+    } >outline.env
 }
 
 # <-------------------------------------------------------------------------->
 # Customize docker ports
-custom_postgres_docker_port(){
+custom_postgres_docker_port() {
     local custom_port="$1"
     sed -i "s/.*# POSTGRES PORT/      - \"${custom_port}:5432\" # POSTGRES PORT/" "./docker-compose.yaml"
 }
 
-custom_redis_docker_port(){
+custom_redis_docker_port() {
     local custom_port="$1"
     sed -i "s/.*# REDIS PORT/      - \"${custom_port}:6379\" # REDIS PORT/" "./docker-compose.yaml"
 }
 
 # <-------------------------------------------------------------------------->
 # Outline specific public access data
-configure_outline(){
+configure_outline() {
     local cmd
     local arg
     cmd="$1"
 
     case "$cmd" in
-        port) set_custom_outline_port ;;
-        fqdn) set_custom_fqdn ;;
+    port) set_custom_outline_port ;;
+    fqdn) set_custom_fqdn ;;
     esac
 }
 
 # <-------------------------------------------------------------------------->
 # Custom docker port for outline
-set_custom_outline_port(){
+set_custom_outline_port() {
     local custom_port
 
     echo "Please enter the port on which Outline should be reachable."
@@ -497,7 +498,7 @@ set_custom_outline_port(){
 
 # <-------------------------------------------------------------------------->
 # Custom fqdn to make outline reachable
-set_custom_fqdn(){
+set_custom_fqdn() {
     local fqdn
     local line_to_replace='URL='
 
@@ -510,177 +511,177 @@ set_custom_fqdn(){
 
 # <-------------------------------------------------------------------------->
 # OIDC helper
-configure_oidc(){
+configure_oidc() {
     local cmd="$1"
     local line_to_replace=""
     local input=""
     local all_oidc=("OIDC_CLIENT_ID=" "OIDC_CLIENT_SECRET=" "OIDC_AUTH_URI=" "OIDC_TOKEN_URI=" "OIDC_USERINFO_URI=" "OIDC_LOGOUT_URI=")
 
-    case "$cmd" in 
-        id) 
-            line_to_replace="OIDC_CLIENT_ID="
-            echo "Please enter your client id." 
-            read -r -p "ID: " input
-            sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
+    case "$cmd" in
+    id)
+        line_to_replace="OIDC_CLIENT_ID="
+        echo "Please enter your client id."
+        read -r -p "ID: " input
+        sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
         ;;
-        secret) 
-            line_to_replace="OIDC_CLIENT_SECRET="
-            echo "Please enter the OIDC secret."
-            read -r -p "Secret: " input
-            sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
+    secret)
+        line_to_replace="OIDC_CLIENT_SECRET="
+        echo "Please enter the OIDC secret."
+        read -r -p "Secret: " input
+        sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
         ;;
-        auth) 
-            line_to_replace="OIDC_AUTH_URI="
-            echo "Please enter the OIDC auth URI."
-            read -r -p "Secret: " input
-            sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
+    auth)
+        line_to_replace="OIDC_AUTH_URI="
+        echo "Please enter the OIDC auth URI."
+        read -r -p "Secret: " input
+        sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
         ;;
-        token) 
-            line_to_replace="OIDC_TOKEN_URI="
-            echo "Please enter the OIDC Token URI."
-            read -r -p "Secret: " input
-            sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
+    token)
+        line_to_replace="OIDC_TOKEN_URI="
+        echo "Please enter the OIDC Token URI."
+        read -r -p "Secret: " input
+        sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
         ;;
-        info) 
-            line_to_replace="OIDC_USERINFO_URI="
-            echo "Please enter the OIDC User-Info URI."
-            read -r -p "Secret: " input
-            sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
+    info)
+        line_to_replace="OIDC_USERINFO_URI="
+        echo "Please enter the OIDC User-Info URI."
+        read -r -p "Secret: " input
+        sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
         ;;
-        logout) 
-            line_to_replace="OIDC_LOGOUT_URI="
-            echo "Please enter the OIDC Logout URI."
-            read -r -p "Secret: " input
-            sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
+    logout)
+        line_to_replace="OIDC_LOGOUT_URI="
+        echo "Please enter the OIDC Logout URI."
+        read -r -p "Secret: " input
+        sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
         ;;
-        remove) 
-            input=""
-            for element in "${all_oidc[@]}"; do
-                line_to_replace="$element"
-                sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
-            done
-         ;;
-        get) 
-            grep "OIDC_" "./outline.env"
-         ;;
+    remove)
+        input=""
+        for element in "${all_oidc[@]}"; do
+            line_to_replace="$element"
+            sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
+        done
+        ;;
+    get)
+        grep "OIDC_" "./outline.env"
+        ;;
     esac
 }
 
 # <-------------------------------------------------------------------------->
 # Configures smtp if needed
-configure_smtp(){
+configure_smtp() {
     local cmd="$1"
     local line_to_replace=""
     local input=""
     local all_smtp=("SMTP_HOST=" "SMTP_PORT=" "SMTP_USERNAME=" "SMTP_PASSWORD=" "SMTP_FROM_EMAIL=" "SMTP_REPLY_EMAIL=")
 
-    case "$cmd" in 
-        host) 
-            line_to_replace="SMTP_HOST="
-            echo "Please enter your SMTP Host."
-            echo -e "${grey}Like this: https://smtp.example.com${nc}" 
-            read -r -p "Host: " input
-            sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
+    case "$cmd" in
+    host)
+        line_to_replace="SMTP_HOST="
+        echo "Please enter your SMTP Host."
+        echo -e "${grey}Like this: https://smtp.example.com${nc}"
+        read -r -p "Host: " input
+        sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
         ;;
-        port) 
-            line_to_replace="SMTP_PORT="
-            echo "Please enter the SMTP port."
-            read -r -p "Port: " input
-            sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
+    port)
+        line_to_replace="SMTP_PORT="
+        echo "Please enter the SMTP port."
+        read -r -p "Port: " input
+        sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
         ;;
-        user) 
-            line_to_replace="SMTP_USERNAME="
-            echo "Please enter the SMTP user."
-            read -r -p "User: " input
-            sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
+    user)
+        line_to_replace="SMTP_USERNAME="
+        echo "Please enter the SMTP user."
+        read -r -p "User: " input
+        sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
         ;;
-        pass) 
-            line_to_replace="SMTP_PASSWORD="
-            echo "Please enter the SMTP password of the desired user."
-            read -r -p "Password: " input
-            sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
+    pass)
+        line_to_replace="SMTP_PASSWORD="
+        echo "Please enter the SMTP password of the desired user."
+        read -r -p "Password: " input
+        sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
         ;;
-        from) 
-            line_to_replace="SMTP_FROM_EMAIL="
-            echo "Please enter the from E-Mail adress."
-            read -r -p "From: " input
-            sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
+    from)
+        line_to_replace="SMTP_FROM_EMAIL="
+        echo "Please enter the from E-Mail adress."
+        read -r -p "From: " input
+        sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
         ;;
-        logout) 
-            line_to_replace="SMTP_REPLY_EMAIL="
-            echo "Please enter the replay E-Mail."
-            read -r -p "Reply to: " input
-            sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
+    logout)
+        line_to_replace="SMTP_REPLY_EMAIL="
+        echo "Please enter the replay E-Mail."
+        read -r -p "Reply to: " input
+        sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
         ;;
-        remove) 
-            input=""
-            for element in "${all_smtp[@]}"; do
-                line_to_replace="$element"
-                sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
-            done
-         ;;
-        get) 
-            grep "SMTP_" "./outline.env"
-         ;;
+    remove)
+        input=""
+        for element in "${all_smtp[@]}"; do
+            line_to_replace="$element"
+            sed -i "s|^${line_to_replace}.*|${line_to_replace}$input|" "./outline.env"
+        done
+        ;;
+    get)
+        grep "SMTP_" "./outline.env"
+        ;;
     esac
 }
 
 # <-------------------------------------------------------------------------->
 # Logic for guided install
-guide(){
+guide() {
     set +x
     if [[ ! -f ./outline.env ]]; then
         echo "To begin the installation run: 'install'"
     else
-        grep "OIDC_\|SMTP_" ./outline.env > "$TODO"
+        grep "OIDC_\|SMTP_" ./outline.env >"$TODO"
     fi
 
-    while read -r line ; do
+    while read -r line; do
         if [[ -z "$(echo "$line" | cut -d'=' -f2-)" ]]; then
-            case "$(echo "$line" | cut -d'=' -f1)" in 
-                OIDC_CLIENT_ID)
-                    echo "[ OIDC ]: You have to set an OIDC Client ID, to do this type: 'oidc id'"
+            case "$(echo "$line" | cut -d'=' -f1)" in
+            OIDC_CLIENT_ID)
+                echo "[ OIDC ]: You have to set an OIDC Client ID, to do this type: 'oidc id'"
                 ;;
-                OIDC_CLIENT_SECRET)
-                    echo -e "[ ${blue}OIDC${nc} ]: You have to set an client secret, to do this type: 'oidc secret'"
+            OIDC_CLIENT_SECRET)
+                echo -e "[ ${blue}OIDC${nc} ]: You have to set an client secret, to do this type: 'oidc secret'"
                 ;;
-                OIDC_AUTH_URI)
-                    echo -e "[ ${blue}OIDC${nc} ]: You have to set an OIDC Auth URI, to do this type: 'oidc auth'"
+            OIDC_AUTH_URI)
+                echo -e "[ ${blue}OIDC${nc} ]: You have to set an OIDC Auth URI, to do this type: 'oidc auth'"
                 ;;
-                OIDC_TOKEN_URI)
-                    echo -e "[ ${blue}OIDC${nc} ]: You have to set the token URI, to do this type: 'oidc token'"
+            OIDC_TOKEN_URI)
+                echo -e "[ ${blue}OIDC${nc} ]: You have to set the token URI, to do this type: 'oidc token'"
                 ;;
-                OIDC_USERINFO_URI)
-                    echo -e "[ ${blue}OIDC${nc} ]: You have to set the User Info URI, to do this type: 'oidc info'"
+            OIDC_USERINFO_URI)
+                echo -e "[ ${blue}OIDC${nc} ]: You have to set the User Info URI, to do this type: 'oidc info'"
                 ;;
-                OIDC_LOGOUT_URI)
-                    echo -e "[ ${blue}OIDC${nc} ]: You don't have to set a logout URI, if you want to, use: 'oidc logout'"
+            OIDC_LOGOUT_URI)
+                echo -e "[ ${blue}OIDC${nc} ]: You don't have to set a logout URI, if you want to, use: 'oidc logout'"
                 ;;
-                SMTP_HOST)
-                    echo -e "[ ${cyan}SMTP${nc} ]: Please add an SMTP host, to this type: 'smtp host'"
+            SMTP_HOST)
+                echo -e "[ ${cyan}SMTP${nc} ]: Please add an SMTP host, to this type: 'smtp host'"
                 ;;
-                SMTP_PORT)
-                    echo -e "[ ${cyan}SMTP${nc} ]: Please add an SMTP port, to this type: 'smtp port'"
+            SMTP_PORT)
+                echo -e "[ ${cyan}SMTP${nc} ]: Please add an SMTP port, to this type: 'smtp port'"
                 ;;
-                SMTP_USERNAME)
-                    echo -e "[ ${cyan}SMTP${nc} ]: Please add an SMTP User, to do this type: 'smtp user'"
+            SMTP_USERNAME)
+                echo -e "[ ${cyan}SMTP${nc} ]: Please add an SMTP User, to do this type: 'smtp user'"
                 ;;
-                SMTP_PASSWORD)
-                    echo -e "[ ${cyan}SMTP${nc} ]: Please add the password for your user: 'smtp pass'"
+            SMTP_PASSWORD)
+                echo -e "[ ${cyan}SMTP${nc} ]: Please add the password for your user: 'smtp pass'"
                 ;;
-                SMTP_FROM_EMAIL)
-                    echo -e "[ ${cyan}SMTP${nc} ]: Please add the from E-Mail Adress, type: 'smtp from'"
+            SMTP_FROM_EMAIL)
+                echo -e "[ ${cyan}SMTP${nc} ]: Please add the from E-Mail Adress, type: 'smtp from'"
                 ;;
-                SMTP_REPLY_EMAIL)
-                    echo -e "[ ${cyan}SMTP${nc} ]: Please add the reply E-Mail Adress, it can be the same as the from E-Mail, 'smtp reply'"
+            SMTP_REPLY_EMAIL)
+                echo -e "[ ${cyan}SMTP${nc} ]: Please add the reply E-Mail Adress, it can be the same as the from E-Mail, 'smtp reply'"
                 ;;
             esac
         else
             true
         fi
-   done < "$TODO"
+    done <"$TODO"
 
-   set +x
+    set +x
 }
 
 # <-------------------------------------------------------------------------->
