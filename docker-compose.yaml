@@ -11,9 +11,10 @@ services:
     depends_on:
       - postgres
       - redis
+      - api
 
   redis:
-    container_name: redis
+    container_name: redis-outline
     image: redis
     volumes:
       - ./easy-outline/redis.conf:/redis.conf
@@ -29,7 +30,7 @@ services:
       retries: 3
 
   postgres:
-    container_name: postgres
+    container_name: postgres-outline
     restart: always
     image: postgres
     env_file:
@@ -43,3 +44,14 @@ services:
       interval: 30s
       timeout: 20s
       retries: 3
+
+  api:
+    build:
+      context: ./easy-outline/iframely/
+      dockerfile: Dockerfile
+    container_name: iframely-outline
+    volumes:
+      - ./easy-outline/iframely/config.local.js:/iframely/config.local.js
+    restart: always
+    ports:
+      - "8061:8061" # IFRAMELY PORT <<< TODO
