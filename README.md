@@ -16,7 +16,7 @@ A quick start for [Outline Wiki](https://github.com/outline/outline)
 ## How to?
 A simple one liner :)
 ```bash
-curl -fsSlo setup.sh https://raw.githubusercontent.com/Its4Nik/EasyOutline/dev-patch/setup.sh && bash setup.sh
+curl -fsSlo setup.sh https://raw.githubusercontent.com/Its4Nik/EasyOutline/main/setup.sh && bash setup.sh
 ```
 
 This will generate random passwords for encryption using `openssl rand -hex 32`
