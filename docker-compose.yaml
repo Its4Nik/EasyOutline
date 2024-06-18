@@ -51,7 +51,7 @@ services:
       dockerfile: Dockerfile
     container_name: iframely-outline
     volumes:
-      - ./easy-outline/iframely/config.local.js:/iframely/config.local.js
+      - ./easy-outline/iframely/config.local.js.SAMPLE:/iframely/config.local.js
     restart: always
     ports:
       - "8061:8061" # IFRAMELY PORT <<< TODO
