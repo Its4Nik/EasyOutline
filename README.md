@@ -1,6 +1,6 @@
 # EasyOutline v2
 A quick start for [Outline Wiki](https://github.com/outline/outline)
-![image](https://github.com/Its4Nik/EasyOutline/assets/106100177/15932c08-e701-4d84-98f1-f240f01f3338)
+![image](https://github.com/Its4Nik/EasyOutline/blob/dev-patch/docs/Asciicinema.gif)
 
 # Requirements:
 
