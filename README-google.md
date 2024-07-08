@@ -16,7 +16,7 @@
 9. Now go to "Credentials", press "add credentials" and choose OAuth Client ID
 ![]](image-1.png)
 
-10. ![alt text]([image-2.png](https://github.com/Its4Nik/EasyOutline/blob/main/docs/image-1.png))
+10. ![alt text](https://github.com/Its4Nik/EasyOutline/blob/main/docs/image-1.png)
 
 11. ![alt text](image-3.png)
 
