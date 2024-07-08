@@ -2,6 +2,12 @@
 A quick start for [Outline Wiki](https://github.com/outline/outline)
 ![image](https://github.com/Its4Nik/EasyOutline/blob/dev-patch/docs/Asciicinema.gif)
 
+# RoadMap v3
+
+Fully automatic install of OIDC server + Outline Wiki
+
+When? Soon.
+
 # Requirements:
 - bash
 - mktemp
