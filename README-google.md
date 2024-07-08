@@ -14,15 +14,16 @@
 8. At the end just go back to the dashboard.
 
 9. Now go to "Credentials", press "add credentials" and choose OAuth Client ID
-![]](image-1.png)
+![alt text](https://github.com/Its4Nik/EasyOutline/blob/main/docs/image-1.png)
 
-10. ![alt text](https://github.com/Its4Nik/EasyOutline/blob/main/docs/image-1.png)
 
-11. ![alt text](image-3.png)
+10. ![alt text](https://github.com/Its4Nik/EasyOutline/blob/main/docs/image-2.png)
+
+11. ![alt text](https://github.com/Its4Nik/EasyOutline/blob/main/docs/image-3.png)
 
 Now you have some secrets, like this:
 
-![alt text](image-4.png)
+![alt text](https://github.com/Its4Nik/EasyOutline/blob/main/docs/image-4.png)
 
 DONT FORGET TO SAVE THEM!
 
