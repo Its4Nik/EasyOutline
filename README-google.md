@@ -3,7 +3,7 @@
 1. Go to https://console.developers.google.com/ and login
 2. Create a new project and call it whatever you want, we dont need this afterwards
 
-![Google](image.png)
+![Google](/docs/image.png)
 
 3. Change to that project.
 
